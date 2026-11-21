@@ -1,0 +1,16 @@
+.studio-bar nav{flex-wrap:wrap;justify-content:flex-end}
+.studio-hero{min-height:570px;display:grid;align-items:center;background:linear-gradient(90deg,#0b1019 5%,#0b1019d9 27%,#0b101933 74%),linear-gradient(0deg,#0b1019,transparent 40%),url(./volga.jpg) center 48%/cover}
+.studio-hero .wrap{padding-block:72px 88px}
+.studio-hero h1{font-size:clamp(4rem,10vw,8.5rem);line-height:.87;letter-spacing:-.08em;margin:20px 0 24px;font-weight:900}
+.studio-hero em{font-style:normal;color:var(--accent)}
+.studio-intro{color:#e0e8f1;font-size:1.22rem;max-width:410px;margin-bottom:26px}
+.studio-sections{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding-block:20px 72px}
+.media-card{min-height:235px;padding:24px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;background:var(--surface)}
+.music-card{background:radial-gradient(ellipse at top right,#442d42,transparent 72%),var(--surface)}
+.games-card{background:radial-gradient(ellipse at top right,#26453f,transparent 72%),var(--surface)}
+.radio-card{background:radial-gradient(ellipse at top right,#214253,transparent 72%),var(--surface)}
+.video-card{background:radial-gradient(ellipse at top right,#3a354c,transparent 72%),var(--surface)}
+.media-card h2{margin:8px 0 10px}.media-card p:not(.kicker){color:#e0e8f1;margin-bottom:20px}.media-status{color:var(--muted);margin-top:auto;font-size:.93rem}
+@media(max-width:1010px){.studio-sections{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.studio-hero{min-height:470px;background-position:60% center}.studio-sections{grid-template-columns:1fr;padding-bottom:35px}.media-card{min-height:185px}}
+@media(max-width:380px){.studio-bar nav{gap:5px 10px}}
