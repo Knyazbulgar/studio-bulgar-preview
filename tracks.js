@@ -29,7 +29,7 @@ export default [
     ]
   },
   {
-    "title": "Жизнь",
+    "title": "Сюжеты",
     "tracks": [
       {
         "id": "2-1",
