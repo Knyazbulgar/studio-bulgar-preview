@@ -22,10 +22,19 @@
     if(result.state==='paid'){
       clearTimeout(poll);if(widget){widget.destroy();widget=null;}
       $('checkout-form').hidden=true;$('check').hidden=true;$('paid').hidden=false;
-      const url=new URL(result.downloadUrl);if(url.origin!==backend||url.pathname!=='/shop/download')throw Error('Некорректная ссылка на игру.');
-      $('download').href=url.href;
-      $('expiry').textContent='Ссылка действует до '+new Date(result.expiresAt).toLocaleString('ru-RU')+'. После этого открой заказ, чтобы получить новую.';
-      message(test?'Тестовый платёж подтверждён сервером.':'Оплата подтверждена. Игра готова к скачиванию.');
+      $('license-key').textContent=result.license.key;
+      $('download-quota').textContent='Осталось загрузок: '+result.license.downloadsRemaining+' из 3.';
+      $('download').disabled=result.license.downloadsRemaining===0;
+      $('license-devices').replaceChildren();
+      if(!result.license.devices.length)$('license-devices').textContent='Компьютеры пока не активированы. Введите ключ при первом запуске игры.';
+      for(const device of result.license.devices){
+        const row=document.createElement('div');row.className='license-device';
+        const name=document.createElement('span');name.textContent=device.label;
+        const button=document.createElement('button');button.type='button';button.className='secondary';button.textContent='Снять активацию';
+        button.addEventListener('click',async()=>{if(!window.confirm('Снять активацию с компьютера «'+device.label+'»? Игра на нём приостановится.'))return;button.disabled=true;try{display(await request('orders/'+order.id+'/revoke',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:device.id})}));}catch(e){message(e.message,true);button.disabled=false;}});
+        row.append(name,button);$('license-devices').append(row);
+      }
+      message(test?'Тестовый платёж подтверждён сервером.':'Оплата подтверждена. Сохраните ключ и ссылку на заказ.');
       return true;
     }
     if(result.state==='canceled'||result.state==='refunded'){
@@ -50,7 +59,7 @@
     try{
       if(!order){order={id:crypto.randomUUID(),access:Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,'0')).join('')};remember();}
       message('Готовим платёжную форму…');
-      const result=await request('checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,email:$('receipt-email').value,termsAccepted:$('terms-accept').checked,termsVersion:'2026-11-26.1'})});
+      const result=await request('checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,email:$('receipt-email').value,termsAccepted:$('terms-accept').checked,termsVersion:'2026-11-26.2'})});
       if(display(result))return;
       await library();if(widget)widget.destroy();
       widget=new window.YooMoneyCheckoutWidget({confirmation_token:result.confirmationToken,return_url:location.href,
@@ -61,6 +70,21 @@
     }catch(error){message(error.message,true);$('check').hidden=!order;}
     finally{busy=false;$('pay').disabled=false;}
   }
+  $('copy-key').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('license-key').textContent);message('Ключ скопирован.');}catch{message('Выделите и скопируйте ключ вручную.');}});
+  $('download').addEventListener('click',async()=>{
+    if(busy)return;busy=true;$('download').disabled=true;
+    const downloadKey=key+'-download-'+order.id;
+    let requestId;try{requestId=sessionStorage.getItem(downloadKey);}catch{}
+    if(!requestId){requestId=crypto.randomUUID();try{sessionStorage.setItem(downloadKey,requestId);}catch{}}
+    try{
+      const result=await request('orders/'+order.id+'/download',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId})});
+      const url=new URL(result.downloadUrl);if(url.origin!==backend||url.pathname!=='/shop/download')throw Error('Некорректная ссылка на игру.');
+      const link=document.createElement('a');link.href=url.href;link.referrerPolicy='no-referrer';link.download='';document.body.append(link);link.click();link.remove();
+      try{sessionStorage.removeItem(downloadKey);}catch{}
+      await check();message('Загрузка начата. Если она прервётся, продолжите её в загрузках браузера.');
+    }catch(e){message(e.message,true);$('download').disabled=false;}
+    finally{busy=false;}
+  });
   $('checkout-form').addEventListener('submit',start);
   $('check').addEventListener('click',check);
   $('new-order').addEventListener('click',()=>{clearTimeout(poll);order=null;try{sessionStorage.removeItem(key);}catch{}location.hash='';location.reload();});
