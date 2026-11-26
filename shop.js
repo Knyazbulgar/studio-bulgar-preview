@@ -1,9 +1,5 @@
 const games = [
-  {id:'neon-frontier', title:'Неоновый рубеж', platform:'PC+VR', genre:'Тир · 1–2 игрока', art:'neon-frontier-art', price:300, url:'./neon-frontier.html', teaser:'Боевые дроны из портала, два оружия и соревнование вдвоём. Полная версия 0.6.0 для Windows.'},
-  {id:'bulgar', title:'Хроники Булгара', platform:'PC', genre:'Приключение', art:'fortress', price:1290, teaser:'Путешествие вдоль Волги к тайнам древней крепости.', description:'Исследуйте прибрежные поселения и крепостные башни. По следам пропавшего картографа предстоит собрать историю города из записей, находок и рассказов его жителей.'},
-  {id:'moon', title:'Лунный рубеж', platform:'VR', genre:'Научная фантастика', art:'moon', price:1490, teaser:'Один астронавт и станция, потерявшая связь с Землёй.', description:'Войдите в заброшенный лунный комплекс, восстановите питание и выясните, почему экипаж оставил станцию. Взаимодействие с панелями и инструментами задумано для VR.'},
-  {id:'forest', title:'Тропа янтаря', platform:'PC', genre:'Головоломка', art:'forest', price:890, teaser:'Лесные тропы, каменные арки и загадки старого святилища.', description:'Наблюдайте за тем, как свет меняет лес, и открывайте новые пути между каменными руинами. В основе концепта — пространственные головоломки и неспешное исследование.'},
-  {id:'race', title:'Неоновый вираж', platform:'VR', genre:'Гонки', art:'racer', price:1090, teaser:'Гонки над городом на машинах с антигравитацией.', description:'Пройдите трассы между башнями ночного города. Выбирайте траектории, берегите заряд ускорителя и улучшайте время круга.'}
+  {id:'neon-frontier', title:'Неоновый рубеж', platform:'PC+VR', genre:'Тир · 1–2 игрока', art:'neon-frontier-art', price:300, url:'./neon-frontier.html', teaser:'Боевые дроны из портала, два оружия и соревнование вдвоём. Полная версия 0.6.0 для Windows.'}
 ];
 const money = new Intl.NumberFormat('ru-RU', {style:'currency', currency:'RUB', maximumFractionDigits:0});
 const products = document.querySelector('#products');

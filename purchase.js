@@ -46,11 +46,11 @@
     await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://yookassa.ru/checkout-widget/v1/checkout-widget.js';script.onload=resolve;script.onerror=()=>reject(Error('Не удалось загрузить платёжную форму ЮKassa.'));document.head.append(script);});
   }
   async function start(event){
-    event.preventDefault();if(busy)return;busy=true;$('pay').disabled=true;
+    event.preventDefault();if(busy)return;if(!$('terms-accept').checked){message('Прочитайте и примите условия оферты.',true);return;}busy=true;$('pay').disabled=true;
     try{
       if(!order){order={id:crypto.randomUUID(),access:Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,'0')).join('')};remember();}
       message('Готовим платёжную форму…');
-      const result=await request('checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,email:$('receipt-email').value})});
+      const result=await request('checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,email:$('receipt-email').value,termsAccepted:$('terms-accept').checked,termsVersion:'2026-11-26.1'})});
       if(display(result))return;
       await library();if(widget)widget.destroy();
       widget=new window.YooMoneyCheckoutWidget({confirmation_token:result.confirmationToken,return_url:location.href,
