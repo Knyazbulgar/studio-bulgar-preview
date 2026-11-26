@@ -12,3 +12,5 @@ dialog{width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--
 @media(max-width:380px){.grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
+
+.neon-frontier-art{background-image:url('./neon-frontier/battle.png')}

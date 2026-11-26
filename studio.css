@@ -14,3 +14,5 @@
 @media(max-width:1010px){.studio-sections{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.studio-hero{min-height:470px;background-position:60% center}.studio-sections{grid-template-columns:1fr;padding-bottom:35px}.media-card{min-height:185px}}
 @media(max-width:380px){.studio-bar nav{gap:5px 10px}}
+
+.studio-game-release{margin-top:25px;font-size:1.05rem;color:#d4dce7}.studio-game-release .primary{margin-top:14px}

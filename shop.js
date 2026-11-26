@@ -1,4 +1,5 @@
 const games = [
+  {id:'neon-frontier', title:'Неоновый рубеж', platform:'PC+VR', genre:'Тир · 1–2 игрока', art:'neon-frontier-art', price:300, url:'./neon-frontier.html', teaser:'Боевые дроны из портала, два оружия и соревнование вдвоём. Полная версия 0.6.0 для Windows.'},
   {id:'bulgar', title:'Хроники Булгара', platform:'PC', genre:'Приключение', art:'fortress', price:1290, teaser:'Путешествие вдоль Волги к тайнам древней крепости.', description:'Исследуйте прибрежные поселения и крепостные башни. По следам пропавшего картографа предстоит собрать историю города из записей, находок и рассказов его жителей.'},
   {id:'moon', title:'Лунный рубеж', platform:'VR', genre:'Научная фантастика', art:'moon', price:1490, teaser:'Один астронавт и станция, потерявшая связь с Землёй.', description:'Войдите в заброшенный лунный комплекс, восстановите питание и выясните, почему экипаж оставил станцию. Взаимодействие с панелями и инструментами задумано для VR.'},
   {id:'forest', title:'Тропа янтаря', platform:'PC', genre:'Головоломка', art:'forest', price:890, teaser:'Лесные тропы, каменные арки и загадки старого святилища.', description:'Наблюдайте за тем, как свет меняет лес, и открывайте новые пути между каменными руинами. В основе концепта — пространственные головоломки и неспешное исследование.'},
@@ -19,9 +20,9 @@ function updateCart() {
   document.querySelector('#count').textContent = cart.size;
   try { localStorage.setItem('bulgar-cart', JSON.stringify([...cart])); } catch {}
 }
-function platform(game) { return game.platform === 'PC' ? 'ПК' : 'VR'; }
+function platform(game) { return game.platform === 'PC+VR' ? 'ПК + VR' : game.platform === 'PC' ? 'ПК' : 'VR'; }
 function displayGames(filter) {
-  products.innerHTML = games.filter(game => filter === 'all' || game.platform === filter).map(game =>
+  products.innerHTML = games.filter(game => filter === 'all' || game.platform === filter || game.platform === 'PC+VR').map(game =>
     `<article class="card"><div class="art ${game.art}" aria-hidden="true"></div><div class="card-content"><p class="meta">${platform(game)} · ${game.genre}</p><h3>${game.title}</h3><p>${game.teaser}</p><div class="card-bottom"><strong class="price">${money.format(game.price)}</strong><button class="secondary" data-game="${game.id}" aria-label="Подробнее об игре ${game.title}">Подробнее</button></div></div></article>`
   ).join('');
 }
@@ -31,6 +32,7 @@ function openPanel(heading, content) {
   if (!dialog.open) dialog.showModal();
 }
 function showGame(game) {
+  if(game.url){location.href=game.url;return;}
   const added = cart.has(game.id);
   openPanel(game.title, `<div class="art dialog-art ${game.art}" aria-hidden="true"></div><p class="meta">${platform(game)} · ${game.genre} · Игровой концепт</p><p class="dialog-copy">${game.description}</p><div class="card-bottom"><strong>${money.format(game.price)}</strong><button class="primary" ${added ? 'data-action="cart"' : 'data-add="' + game.id + '"'}>${added ? 'Открыть корзину' : 'В корзину'}</button></div>`);
   body.querySelector('button').focus();
