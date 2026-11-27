@@ -96,6 +96,7 @@
     $('test-notice').hidden=!test;
     try{
       config=await request('config');
+      const description=document.querySelector('.checkout-description');if(description&&config.version)description.textContent='Полная версия '+config.version+' · Windows · обычный ПК и PC VR';
       if(order){$('check').hidden=false;await check();}
       if(!config.enabled){if(!order)message('Приём настоящих платежей ещё не активирован. Деньги не списываются. Покупка станет доступна после подключения магазина.',false);return;}
       $('receipt-field').hidden=!config.receiptEmailRequired;$('receipt-email').required=config.receiptEmailRequired;
